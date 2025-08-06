@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Panel</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f6fb;
+            color: #222;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            background: linear-gradient(90deg, #0078d4 60%, #005fa3 100%);
+            padding: 18px 0 14px 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0,120,212,0.08);
+            z-index: 1000;
+            min-height: 60px;
+        }
+        .company-name {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-left: 32px;
+            margin-right: 32px;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            flex-shrink: 0;
+        }
+        .user-info {
+            color: #fff;
+            font-weight: 500;
+            margin-right: auto;
+            margin-left: 0;
+            font-size: 1em;
+        }
+        .nav-bar button, .nav-bar a button {
+            background: #fff;
+            color: #0078d4;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 22px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .nav-bar button:hover, .nav-bar a button:hover {
+            background: #e3e8ee;
+            color: #005fa3;
+        }
+        .side-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100vh;
+            background: #181c24;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 0 0 0;
+            z-index: 1000;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+            transition: width 0.2s;
+        }
+        .side-nav.expanded {
+            width: 260px;
+        }
+        .side-nav .logo {
+            width: 48px;
+            height: 48px;
+            background: #4f46e5;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-bottom: 24px;
+            margin-top: 6px;
+        }
+        .side-nav .company-label {
+            color: #fff;
+            font-size: 1.08em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            display: none;
+        }
+        .side-nav.expanded .company-label {
+            display: block;
+        }
+        .side-nav .nav-btn {
+            background: none;
+            border: none;
+            color: #bfc9d9;
+            font-size: 1.5em;
+            margin: 12px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 10px 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.18s, color 0.18s;
+        }
+        .side-nav .nav-btn.active,
+        .side-nav .nav-btn:hover {
+            background: #232836;
+            color: #fff;
+        }
+        .side-nav .nav-btn span {
+            display: none;
+            font-size: 1.08em;
+            font-weight: 500;
+        }
+        .side-nav.expanded .nav-btn span {
+            display: inline;
+        }
+        .side-nav .bottom-section {
+            margin-top: auto;
+            width: 100%;
+            padding-bottom: 18px;
+        }
+        .side-nav .toggle-expand {
+            background: none;
+            border: none;
+            color: #bfc9d9;
+            font-size: 1.3em;
+            margin: 10px 0 0 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: color 0.18s;
+        }
+        .side-nav .toggle-expand:hover {
+            color: #fff;
+        }
+        .main-content {
+            margin-left: 80px;
+            padding: 32px 12px 12px 12px;
+            transition: margin-left 0.2s;
+        }
+        .side-nav.expanded ~ .main-content {
+            margin-left: 260px;
+        }
+        @media (max-width: 700px) {
+            .side-nav, .side-nav.expanded {
+                width: 60px;
+            }
+            .side-nav.expanded .company-label,
+            .side-nav.expanded .nav-btn span {
+                display: none;
+            }
+            .main-content, .side-nav.expanded ~ .main-content {
+                margin-left: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="side-nav" id="sideNav">
+        <div class="logo">CL</div>
+        <div class="company-label">CodeLights</div>
+        <!-- User info section -->
+        <div id="sidebarUserInfo" style="color:#fff; margin-bottom:18px; text-align:center; font-size:1em; font-weight:500;">
+            <!-- Filled by JS -->
+        </div>
+        <button class="nav-btn" id="dashboardBtn" title="Dashboard" onclick="location.href='AdminPanel.html'">
+            <span class="icon">🏠</span>
+            <span class="label">Dashboard</span>
+        </button>
+        <button class="nav-btn" id="userPanelBtn" title="User Panel" onclick="location.href='Panel.html'">
+            <span class="icon">👤</span>
+            <span class="label">User Panel</span>
+        </button>
+        <button class="nav-btn" id="logsBtn" title="Logs" onclick="location.href='Logs.html'">
+            <span class="icon">📜</span>
+            <span class="label">Logs</span>
+        </button>
+        <button class="nav-btn" id="logoutBtn" title="Logout" onclick="location.href='../index.html'">
+            <span class="icon">🔓</span>
+            <span class="label">Logout</span>
+        </button>
+        <div class="bottom-section">
+            <button class="nav-btn" onclick="toggleTheme()">
+                <span class="icon">🌙</span>
+                <span class="label">Light Mode</span>
+            </button>
+            <button class="toggle-expand" id="expandBtn" title="Expand/collapse menu">⫶</button>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1 class="center-content">User Panel</h1>
+        <div class="center-content">
+            <p>Welcome to the user panel.</p>
+        </div>
+    </div>
+    <script>
+        // Sidebar expand/collapse with persistence
+        const sideNav = document.getElementById('sideNav');
+        const expandBtn = document.getElementById('expandBtn');
+
+        // Restore sidebar state from localStorage
+        if (localStorage.getItem('sidebarExpanded') === 'true') {
+            sideNav.classList.add('expanded');
+            document.querySelector('.main-content').classList.add('expanded');
+        }
+
+        expandBtn.onclick = function() {
+            sideNav.classList.toggle('expanded');
+            document.querySelector('.main-content').classList.toggle('expanded');
+            // Save state
+            localStorage.setItem('sidebarExpanded', sideNav.classList.contains('expanded'));
+        };
+
+        // Light/Dark mode toggle with persistence
+        function applyTheme() {
+            if (localStorage.getItem('lightMode') === 'true') {
+                document.body.classList.add('light-mode');
+                document.body.style.background = "#fff";
+            } else {
+                document.body.classList.remove('light-mode');
+                document.body.style.background = "#f4f6fb";
+            }
+        }
+        function toggleTheme() {
+            const isLight = !document.body.classList.contains('light-mode');
+            localStorage.setItem('lightMode', isLight);
+            applyTheme();
+        }
+        // Apply theme on load
+        applyTheme();
+
+        // Permissions-based nav visibility and user info
+        (async function() {
+            const loggedIn = sessionStorage.getItem('loggedInAdmin');
+            if (!loggedIn) {
+                window.location.href = "../index.html";
+                return;
+            }
+            // Fetch user and role from backend
+            const users = await fetch("http://localhost:5089/api/users").then(r => r.json());
+            const roles = await fetch("http://localhost:5089/api/roles").then (r => r.json());
+            const user = users.find(u => u.username === loggedIn);
+            if (!user) {
+                window.location.href = "../index.html";
+                return;
+            }
+            const role = roles.find(r => r.name === user.role);
+            if (!role) {
+                alert("Access denied: You do not have permission to view this panel.");
+                window.location.href = "../index.html";
+                return;
+            }
+
+            const permissions = {
+                canDelete: !!role.canDelete,
+                canCreate: !!role.canCreate,
+                canEdit: !!role.canEdit,
+                canViewLogs: !!role.canViewLogs,
+                panelAdmin: !!role.panelAdmin,
+                panelUser: !!role.panelUser,
+                panelLogs: !!role.panelLogs
+            };
+
+            // Show/hide sidebar buttons based on permissions
+            document.getElementById('dashboardBtn').style.display = permissions.panelAdmin ? '' : 'none';
+            document.getElementById('userPanelBtn').style.display = permissions.panelUser ? '' : 'none';
+            document.getElementById('logsBtn').style.display = permissions.panelLogs ? '' : 'none';
+
+            // Show user info in sidebar
+            document.getElementById('sidebarUserInfo').innerHTML =
+                `<div>Logged in as:</div><div style="font-weight:700;">${user.username}</div><div style="font-size:0.95em;">Role: ${user.role}</div>`;
+        })();
+    </script>
+</body>
+</html>

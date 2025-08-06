@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f6fb;
+            color: #222;
+            font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif;
+            font-size: 1.05em;
+            letter-spacing: 0.01em;
+        }
+        .side-nav { position: fixed; top: 0; left: 0; width: 80px; height: 100vh; background: #181c24; display: flex; flex-direction: column; align-items: center; padding: 18px 0 0 0; z-index: 1000; box-shadow: 2px 0 8px rgba(0,0,0,0.08); transition: width 0.2s; }
+        .side-nav.expanded { width: 260px; }
+        .side-nav .logo { width: 48px; height: 48px; background: #4f46e5; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.3em; margin-bottom: 24px; margin-top: 6px; }
+        .side-nav .company-label { color: #fff; font-size: 1.08em; font-weight: 600; margin-bottom: 24px; letter-spacing: 1px; display: none; }
+        .side-nav.expanded .company-label { display: block; }
+        .side-nav .nav-btn { background: none; border: none; color: #bfc9d9; font-size: 1.5em; margin: 12px 0; width: 100%; display: flex; align-items: center; gap: 18px; padding: 10px 24px; cursor: pointer; border-radius: 8px; transition: background 0.18s, color 0.18s; }
+        .side-nav .nav-btn.active, .side-nav .nav-btn:hover { background: #232836; color: #fff; }
+        .side-nav .nav-btn span { display: none; font-size: 1.08em; font-weight: 500; }
+        .side-nav.expanded .nav-btn span { display: inline; }
+        .side-nav .bottom-section { margin-top: auto; width: 100%; padding-bottom: 18px; }
+        .side-nav .toggle-expand { background: none; border: none; color: #bfc9d9; font-size: 1.3em; margin: 10px 0 0 0; cursor: pointer; width: 100%; text-align: center; transition: color 0.18s; }
+        .side-nav .toggle-expand:hover { color: #fff; }
+        .main-content { margin-left: 80px; padding: 32px 12px 12px 12px; transition: margin-left 0.2s; }
+        .side-nav.expanded ~ .main-content { margin-left: 260px; }
+        @media (max-width: 700px) {
+            .side-nav, .side-nav.expanded { width: 60px; }
+            .side-nav.expanded .company-label, .side-nav.expanded .nav-btn span { display: none; }
+            .main-content, .side-nav.expanded ~ .main-content { margin-left: 60px; }
+        }
+        
+        .side-nav.expanded {
+            width: 260px;
+        }
+        .side-nav .logo {
+            width: 48px;
+            height: 48px;
+            background: #4f46e5;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-bottom: 24px;
+            margin-top: 6px;
+        }
+        .side-nav .company-label {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            display: none;
+        }
+        .side-nav.expanded .company-label {
+            display: block;
+        }
+        .side-nav .nav-btn {
+            background: none;
+            border: none;
+            color: #bfc9d9;
+            font-size: 1.5em;
+            margin: 12px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 10px 24px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.18s, color 0.18s;
+        }
+        .side-nav .nav-btn.active,
+        .side-nav .nav-btn:hover {
+            background: #232836;
+            color: #fff;
+        }
+        .side-nav .nav-btn span {
+            display: none;
+            font-size: 1.08em;
+            font-weight: 500;
+        }
+        .side-nav.expanded .nav-btn span {
+            display: inline;
+        }
+        .side-nav .bottom-section {
+            margin-top: auto;
+            width: 100%;
+            padding-bottom: 18px;
+        }
+        .side-nav .toggle-expand {
+            background: none;
+            border: none;
+            color: #bfc9d9;
+            font-size: 1.3em;
+            margin: 10px 0 0 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: color 0.18s;
+        }
+        .side-nav .toggle-expand:hover {
+            color: #fff;
+        }
+        .main-content {
+            margin-left: 80px;
+            padding: 32px 12px 12px 12px;
+            transition: margin-left 0.2s;
+        }
+        .side-nav.expanded ~ .main-content {
+            margin-left: 260px;
+        }
+        @media (max-width: 700px) {
+            .side-nav, .side-nav.expanded {
+                width: 60px;
+            }
+            .side-nav.expanded .company-label,
+            .side-nav.expanded .nav-btn span {
+                display: none;
+            }
+            .main-content, .side-nav.expanded ~ .main-content {
+                margin-left: 60px;
+            }
+        }
+        .center-content, h1, h2, h3, label, .user-role-title {
+            font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+            text-align: center !important;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 1.35em;
+            color: #4f46e5;
+            letter-spacing: 0.5px;
+        }
+        .user-roles-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 24px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+        }
+        .user-role-box {
+            min-width: 260px;
+            max-width: 320px;
+            flex: 0 0 260px;
+            background: linear-gradient(135deg, #f4f6fb 60%, #e3e8ee 100%);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(80,100,180,0.08);
+            padding: 20px 14px 16px 14px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            border: 1.5px solid #e0e7ef;
+            transition: box-shadow 0.2s;
+        }
+        .user-role-box:hover {
+            box-shadow: 0 8px 32px rgba(80,100,180,0.16);
+            border-color: #bfc9d9;
+        }
+        .user-role-title {
+            font-size: 1.18em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .user-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0;
+            background: transparent;
+        }
+        .user-list-table th, .user-list-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        .user-list-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            text-align: center;
+        }
+        .user-list-table tr:last-child td {
+            border-bottom: none;
+        }
+        @media (max-width: 900px) {
+            .user-roles-grid { flex-direction: column; gap: 20px; }
+            .user-role-box { max-width: 100%; }
+        }
+        /* Modal and emoji picker styles from your prompt */
+        #roleEditModal, #userEditModal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.4); z-index: 1000; align-items: center; justify-content: center;
+        }
+        #roleEditModal > div, #userEditModal > div {
+            background: #fff; padding: 32px; border-radius: 8px; min-width: 320px; max-width: 90vw; margin: auto; position: relative;
+        }
+        #emojiPicker {
+            display: none; position: absolute; border: 1px solid #ddd; background: #fff; border-radius: 8px;
+            padding: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 2000;
+        }
+        #emojiPicker span { font-size: 1.5em; cursor: pointer; padding: 4px; transition: background 0.2s; }
+        #emojiPicker span:hover { background: #f0f0f0; }
+        .current-users-bg {
+            max-width: 98vw;
+            width: 1200px;
+            margin: 40px auto 0 auto;
+            background: linear-gradient(120deg, #e3e8ee 60%, #f4f6fb 100%);
+            border-radius: 24px;
+            box-shadow: 0 6px 32px rgba(80,100,180,0.10);
+            padding: 36px 32px 32px 32px;
+            display: block;
+        }
+        @media (max-width: 1300px) {
+            .current-users-bg { width: 98vw; padding: 18px 4vw; }
+        }
+        .center-content,
+.current-users-bg,
+.user-form,
+.user-list {
+    max-width: 1200px !important;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.user-form,
+.current-users-bg,
+.user-list {
+    background: linear-gradient(120deg, #e3e8ee 60%, #f4f6fb 100%);
+    border-radius: 24px;
+    box-shadow: 0 6px 32px rgba(80,100,180,0.10);
+    padding: 36px 32px 32px 32px;
+    margin-bottom: 32px;
+}
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+<div class="side-nav" id="sideNav">
+    <div class="logo">MS</div>
+    <div class="company-label">My Site</div>
+    <div id="sidebarUserInfo" style="color:#fff; margin-bottom:18px; text-align:center; font-size:1em; font-weight:500;">
+        <!-- Filled by JS -->
+    </div>
+    <button class="nav-btn active" id="dashboardBtn" title="Dashboard" onclick="location.href='AdminPanel.html'">
+        <span class="icon">🏠</span>
+        <span class="label">Dashboard</span>
+    </button>
+    <button class="nav-btn" id="userPanelBtn" title="User Panel" onclick="location.href='Panel.html'">
+        <span class="icon">👤</span>
+        <span class="label">User Panel</span>
+    </button>
+    <button class="nav-btn" id="logsBtn" title="Logs" onclick="location.href='Logs.html'">
+        <span class="icon">📜</span>
+        <span class="label">Logs</span>
+    </button>
+    <button class="nav-btn" id="logoutBtn" title="Logout" onclick="location.href='../index.html'">
+        <span class="icon">🔓</span>
+        <span class="label">Logout</span>
+    </button>
+    <div class="bottom-section">
+        <button class="nav-btn" onclick="toggleTheme()">
+            <span class="icon">🌙</span>
+            <span class="label">Light Mode</span>
+        </button>
+        <button class="toggle-expand" id="expandBtn" title="Expand/collapse menu">⫶</button>
+    </div>
+</div>
+    <div class="main-content">
+        <h1 class="center-content">Admin Panel</h1>
+        <div class="user-form center-content">
+            <h2>Add New User</h2>
+            <form id="addUserForm">
+                <input type="text" id="newUsername" placeholder="Username" required>
+                <input type="password" id="newPassword" placeholder="Password" required>
+                <select id="newRole" required>
+                    <!-- Roles will be filled by JS -->
+                </select>
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+
+        <!-- Wrap this section -->
+        <div class="current-users-bg">
+            <div class="user-list center-content" style="margin-top:40px; padding-bottom:24px;">
+                <h2 style="margin-bottom:0;">Current Users</h2>
+                <input type="text" id="userSearch" placeholder="Search users..." style="margin:18px 0 10px 0; width:100%; max-width:400px; padding:8px 12px; border-radius:6px; border:1px solid #ddd; font-size:1em;">
+                <div class="user-roles-grid" id="userRolesGrid">
+                    <!-- Boxes for each role will be filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="user-list center-content" style="margin-top:40px; padding-bottom:24px;">
+            <h2>Role Editor</h2>
+            <form id="addRoleForm" style="margin-bottom:18px; display: flex; gap: 10px; align-items: center;">
+                <label for="newRoleName" style="margin:0;">New Role Name:</label>
+                <input type="text" id="newRoleName" required style="flex:1;">
+                <button type="submit">Add Role</button>
+            </form>
+            <table id="roleTable" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th>Role Name</th>
+                        <th>Permissions</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="roleList">
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Role Edit Modal -->
+        <div id="roleEditModal">
+            <div>
+                <h3>Edit Role</h3>
+                <form id="editRoleForm">
+                    <label>
+                        Emoji:
+                        <button type="button" id="emojiPickerBtn" style="font-size:1.5em;vertical-align:middle;">😀</button>
+                        <span id="selectedEmoji" style="font-size:1.5em;vertical-align:middle;margin-left:8px;"></span>
+                    </label><br>
+                    <label>Name: <input type="text" id="editRoleName" required style="width:70%;"></label><br><br>
+                    <label><input type="checkbox" id="editPanelAdmin"> Admin Panel</label><br>
+                    <label><input type="checkbox" id="editPanelUser"> User Panel</label><br>
+                    <label><input type="checkbox" id="editPanelLogs"> Logs Panel</label><br>
+                    <label><input type="checkbox" id="editCanDelete"> Can Delete</label><br>
+                    <label><input type="checkbox" id="editCanCreate"> Can Create</label><br>
+                    <label><input type="checkbox" id="editCanEdit"> Can Edit</label><br>
+                    <label><input type="checkbox" id="editCanViewLogs"> Can View Logs</label><br><br>
+                    <button type="submit">Save</button>
+                    <button type="button" id="closeRoleEditModal">Cancel</button>
+                    <button type="button" id="deleteRoleBtn" style="background:#e74c3c;color:#fff;margin-left:8px;">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- User Edit Modal -->
+        <div id="userEditModal">
+            <div>
+                <h3>Edit User</h3>
+                <form id="editUserForm">
+                    <label>Username: <input type="text" id="editUsername" required></label><br><br>
+                    <label>Password: <input type="text" id="editPassword"></label><br><br>
+                    <label>Role:
+                        <select id="editUserRole" required></select>
+                    </label><br><br>
+                    <button type="submit">Save</button>
+                    <button type="button" id="closeUserEditModal">Cancel</button>
+                    <button type="button" id="deleteUserBtn" style="background:#e74c3c;color:#fff;margin-left:8px;">Delete</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Emoji Picker (HTML) -->
+        <div id="emojiPicker"></div>
+    </div>
+    <script>
+        // Sidebar expand/collapse with persistence
+        const sideNav = document.getElementById('sideNav');
+        const expandBtn = document.getElementById('expandBtn');
+        if (localStorage.getItem('sidebarExpanded') === 'true') {
+            sideNav.classList.add('expanded');
+            document.querySelector('.main-content').classList.add('expanded');
+        }
+        expandBtn.onclick = function() {
+            sideNav.classList.toggle('expanded');
+            document.querySelector('.main-content').classList.toggle('expanded');
+            localStorage.setItem('sidebarExpanded', sideNav.classList.contains('expanded'));
+        };
+        // Light/Dark mode toggle with persistence
+        function applyTheme() {
+            if (localStorage.getItem('lightMode') === 'true') {
+                document.body.classList.add('light-mode');
+                document.body.style.background = "#fff";
+            } else {
+                document.body.classList.remove('light-mode');
+                document.body.style.background = "#f4f6fb";
+            }
+        }
+        function toggleTheme() {
+            const isLight = !document.body.classList.contains('light-mode');
+            localStorage.setItem('lightMode', isLight);
+            applyTheme();
+        }
+        applyTheme();
+
+        // --- Emoji Picker Logic ---
+        const emojiList = [
+            "😀","😁","😂","🤣","😃","😄","😅","😆","😉","😊","😋","😎","😍","😘","😗","😙","😚","🙂","🤗","🤩","🤔","🤨","😐","😑","😶","🙄","😏","😣","😥","😮","😯","😲","😳","😵","😡","😠","🤬","😷","🤒","🤕","🤑","🤠",
+            "😇","🥳","🥰","😜","😝","😛","🫠","🥲","🥹","🥺","🤓","🧐","😤","😪","😴","🥱","😬","🤥","🤫","🤭","🫢","🫣","😈","👿","👹","👺","💀","☠️","👻","👽","👾","🤖",
+            "🛡️","👨‍💼","👩‍💼","👨‍💻","👩‍💻","🔒","📝","📊","🧑‍🎓","🦸‍♂️","🦸‍♀️","🦹‍♂️","🦹‍♀️","👑","👮‍♂️","👮‍♀️","🕵️‍♂️","🕵️‍♀️","👨‍🏫","👩‍🏫","👨‍🔬","👩‍🔬","👨‍⚖️","👩‍⚖️",
+            "👨‍🚀","👩‍🚀","👨‍🍳","👩‍🍳","👨‍🎨","👩‍🎨","👨‍✈️","👩‍✈️","👨‍🔧","👩‍🔧","👨‍🏭","👩‍🏭","👨‍🌾","👩‍🌾","👨‍⚕️","👩‍⚕️","🧑‍⚕️","🧑‍🏫","🧑‍🔬","🧑‍🎨",
+            "😺","😸","😻","😼","😽","🙀","😿","😾","🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🦄","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦓","🦍","🦧","🐢","🐍","🦎","🦂","🦀","🦞","🦐","🦑",
+            "⭐","🌟","✨","⚡","🔥","💧","🌈","☀️","🌤️","⛅","🌦️","🌧️","🌨️","❄️","☃️","⛄","🌬️","💨","🌀","🌪️","🌫️","🌊","🎯","🎲","🎮","🎵","🎶","🎤","🎧","🎷","🎸","🎹","🥁","🎺","🎻","📚","📖","📰","📅","📆","📈","📉","📊","📋","📌","📍","📎","🖇️","📏","📐","✏️","✒️","🖊️","🖋️","🖌️","🖍️","📝","🔒","🔓","🔏","🔐","🔑","🗝️","🔨","🪓","⛏️","⚒️","🛠️","🗡️","⚔️","🔫","🏹","🛡️",
+            "🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶️","🫑","🌽","🥕","🫒","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🥞","🧇","🧀","🍖","🍗","🥩","🥓","🍔","🍟","🍕","🌭","🥪","🌮","🌯","🫔","🥙","🧆","🥚","🍳","🥘","🍲","🫕","🥣","🥗","🍿","🧈","🧂","🥫","🍱","🍘","🍙","🍚","🍛","🍜","🍝","🍠","🍢","🍣","🍤","🍥","🥮","🍡","🥟","🥠","🥡","🦪","🍦","🍧","🍨","🍩","🍪","🎂","🍰","🧁","🥧","🍫","🍬","🍭","🍮","🍯","🍼","🥛","☕","🍵","🧃","🥤","🧋","🧉","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧊",
+            "🏳️","🏴","🏁","🚩","🏳️‍🌈","🏳️‍⚧️","🇺🇸","🇬🇧","🇨🇦","🇦🇺","🇫🇷","🇩🇪","🇯🇵","🇰🇷","🇨🇳","🇮🇳","🇧🇷","🇿🇦"
+        ];
+        const emojiPicker = document.getElementById('emojiPicker');
+        emojiPicker.innerHTML = emojiList.map(e => `<span>${e}</span>`).join('');
+        let currentEmoji = "😀";
+        const emojiPickerBtn = document.getElementById('emojiPickerBtn');
+        const selectedEmoji = document.getElementById('selectedEmoji');
+        emojiPickerBtn.onclick = function(e) {
+            emojiPicker.style.display = 'block';
+            emojiPicker.style.left = (e.pageX + 10) + 'px';
+            emojiPicker.style.top = (e.pageY - 10) + 'px';
+        };
+        emojiPicker.querySelectorAll('span').forEach(span => {
+            span.onclick = function() {
+                currentEmoji = this.textContent;
+                selectedEmoji.textContent = currentEmoji;
+                emojiPicker.style.display = 'none';
+            };
+        });
+        document.addEventListener('mousedown', function(e) {
+            if (!emojiPicker.contains(e.target) && e.target !== emojiPickerBtn) {
+                emojiPicker.style.display = 'none';
+            }
+        });
+
+        // --- Permissions-based nav visibility and user info
+        (async function() {
+            const loggedIn = sessionStorage.getItem('loggedInAdmin');
+            if (!loggedIn) {
+                window.location.href = "../index.html";
+                return;
+            }
+            const users = await fetch("http://localhost:5089/api/users").then(r => r.json());
+            const roles = await fetch("http://localhost:5089/api/roles").then(r => r.json());
+            const user = users.find(u => u.username === loggedIn);
+            if (!user) {
+                window.location.href = "../index.html";
+                return;
+            }
+            const role = roles.find(r => r.name === user.role);
+            if (!role || !role.panelAdmin) {
+                alert("Access denied: You do not have permission to view the admin panel.");
+                window.location.href = "../index.html";
+                return;
+            }
+            document.getElementById('sidebarUserInfo').innerHTML =
+                `<div></div><div style="font-weight:700;">👤${user.username}</div><div style="font-size:0.95em;">${user.role}</div>`;
+            document.getElementById('dashboardBtn').style.display = role.panelAdmin ? '' : 'none';
+            document.getElementById('userPanelBtn').style.display = role.panelUser ? '' : 'none';
+            document.getElementById('logsBtn').style.display = role.panelLogs ? '' : 'none';
+        })();
+
+        // --- Logging helper ---
+        async function logAction({admin, targetUser, action, details}) {
+            await fetch("http://localhost:5089/api/logs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    admin,
+                    targetUser,
+                    action,
+                    details,
+                    time: new Date().toISOString()
+                })
+            });
+        }
+
+        // --- Render users ---
+        async function updateUserList() {
+            const users = await fetch("http://localhost:5089/api/users").then(r => r.json());
+            const roles = await fetch("http://localhost:5089/api/roles").then(r => r.json());
+            const grid = document.getElementById('userRolesGrid');
+            const search = document.getElementById('userSearch')?.value?.toLowerCase() || '';
+            grid.innerHTML = '';
+
+            // Compute relevance for each role (number of matching users)
+            let rolesWithRelevance = roles.map(role => {
+                const roleUsers = users.filter(u =>
+                    u.role === role.name &&
+                    (!search || u.username.toLowerCase().includes(search))
+                );
+                return { role, users: roleUsers, relevance: roleUsers.length };
+            });
+
+            // Sort: most relevant (most matches) first if searching, else original order
+            if (search) {
+                rolesWithRelevance.sort((a, b) => b.relevance - a.relevance);
+            }
+
+            rolesWithRelevance.forEach(({role, users: roleUsers}) => {
+                const match = /^(\p{Emoji_Presentation}|\p{Extended_Pictographic})?\s*(.*)$/u.exec(role.name);
+                const emoji = match && match[1] ? match[1] : "😀";
+                const name = match && match[2] ? match[2] : role.name;
+
+                let table = `<table class="user-list-table"><thead>
+                    <tr><th>Username</th><th>Actions</th></tr>
+                </thead><tbody>`;
+                if (roleUsers.length === 0) {
+                    table += `<tr><td colspan="2" style="color:#bbb;text-align:center;">No users</td></tr>`;
+                } else {
+                    roleUsers.forEach(user => {
+                        table += `<tr>
+                            <td>${user.username}</td>
+                            <td>
+                                <button class="editUserBtn" data-id="${user.id}">Edit</button>
+                            </td>
+                        </tr>`;
+                    });
+                }
+                table += `</tbody></table>`;
+
+                const box = document.createElement('div');
+                box.className = 'user-role-box';
+                box.innerHTML = `<div class="user-role-title">${emoji} ${name}</div>${table}`;
+                grid.appendChild(box);
+            });
+
+            // Attach event listeners for edit/delete
+            const allUsers = users;
+            document.querySelectorAll('.editUserBtn').forEach(btn => {
+                btn.onclick = function() {
+                    const id = this.getAttribute('data-id');
+                    const user = allUsers.find(u => u.id == id);
+                    openUserEditModal(user);
+                };
+            });
+            document.querySelectorAll('.deleteUserBtn').forEach(btn => {
+                btn.onclick = async function() {
+                    const id = this.getAttribute('data-id');
+                    const user = allUsers.find(u => u.id == id);
+                    if (!confirm("Delete this user?")) return;
+                    await fetch(`http://localhost:5089/api/users/${id}`, { method: "DELETE" });
+                    await logAction({
+                        admin: sessionStorage.getItem('loggedInAdmin'),
+                        targetUser: user.username,
+                        action: "Deleted user",
+                        details: `Role: ${user.role}`
+                    });
+                    updateUserList();
+                };
+            });
+        }
+
+        // --- Render roles ---
+        async function updateRoleList() {
+            const roles = await fetch("http://localhost:5089/api/roles").then(r => r.json());
+            const roleList = document.getElementById('roleList');
+            roleList.innerHTML = '';
+            roles.forEach(role => {
+                const perms = [];
+                if (role.panelAdmin) perms.push('Admin Panel');
+                if (role.panelUser) perms.push('User Panel');
+                if (role.panelLogs) perms.push('Logs Panel');
+                if (role.canDelete) perms.push('Delete');
+                if (role.canCreate) perms.push('Create');
+                if (role.canEdit) perms.push('Edit');
+                if (role.canViewLogs) perms.push('View Logs');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${role.name}</strong></td>
+                    <td style="font-size:0.97em; color:#555;">${perms.join(', ') || '<span style="color:#bbb;">None</span>'}</td>
+                    <td>
+                        <button class="editRoleBtn" data-id="${role.id}">Edit</button>
+                    </td>
+                `;
+                roleList.appendChild(tr);
+            });
+            document.querySelectorAll('.editRoleBtn').forEach(btn => {
+                btn.onclick = function() {
+                    const id = this.getAttribute('data-id');
+                    fetch("http://localhost:5089/api/roles").then(r => r.json()).then(roles => {
+                        const role = roles.find(r => r.id == id);
+                        openRoleEditModal(role);
+                    });
+                };
+            });
+            document.querySelectorAll('.deleteRoleBtn').forEach(btn => {
+                btn.onclick = async function() {
+                    const id = this.getAttribute('data-id');
+                    const role = (await fetch("http://localhost:5089/api/roles").then(r => r.json())).find(r => r.id == id);
+                    if (!confirm("Delete this role?")) return;
+                    await fetch(`http://localhost:5089/api/roles/${id}`, { method: "DELETE" });
+                    await logAction({
+                        admin: sessionStorage.getItem('loggedInAdmin'),
+                        targetUser: role.name,
+                        action: "Deleted role",
+                        details: ""
+                    });
+                    updateRoleList();
+                };
+            });
+        }
+
+        // --- User Edit Modal logic ---
+        let currentEditUserId = null;
+        function openUserEditModal(user) {
+            currentEditUserId = user.id;
+            document.getElementById('editUsername').value = user.username;
+            document.getElementById('editPassword').value = "";
+            fetch("http://localhost:5089/api/roles").then(r => r.json()).then(roles => {
+                const select = document.getElementById('editUserRole');
+                select.innerHTML = '';
+                roles.forEach(role => {
+                    const opt = document.createElement('option');
+                    opt.value = role.name;
+                    opt.textContent = role.name;
+                    if (role.name === user.role) opt.selected = true;
+                    select.appendChild(opt);
+                });
+                document.getElementById('userEditModal').style.display = 'flex';
+                // Attach delete logic
+                document.getElementById('deleteUserBtn').onclick = async function() {
+                    if (!confirm("Delete this user?")) return;
+                    await fetch(`http://localhost:5089/api/users/${currentEditUserId}`, { method: "DELETE" });
+                    await logAction({
+                        admin: sessionStorage.getItem('loggedInAdmin'),
+                        targetUser: user.username,
+                        action: "Deleted user",
+                        details: `Role: ${user.role}`
+                    });
+                    document.getElementById('userEditModal').style.display = 'none';
+                    updateUserList();
+                };
+            });
+        }
+        document.getElementById('closeUserEditModal').onclick = function() {
+            document.getElementById('userEditModal').style.display = 'none';
+        };
+        document.getElementById('editUserForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const id = currentEditUserId;
+            const username = document.getElementById('editUsername').value.trim();
+            const password = document.getElementById('editPassword').value;
+            const role = document.getElementById('editUserRole').value;
+            await fetch(`http://localhost:5089/api/users/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password, role })
+            });
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: username,
+                action: "Edited user",
+                details: `Role: ${role}`
+            });
+            document.getElementById('userEditModal').style.display = 'none';
+            updateUserList();
+        };
+        document.getElementById('deleteUserBtn').onclick = async function() {
+            const id = currentEditUserId;
+            if (!confirm("Delete this user?")) return;
+            await fetch(`http://localhost:5089/api/users/${id}`, { method: "DELETE" });
+            const username = document.getElementById('editUsername').value;
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: username,
+                action: "Deleted user",
+                details: ""
+            });
+            document.getElementById('userEditModal').style.display = 'none';
+            updateUserList();
+        };
+
+        // --- Role Edit Modal logic ---
+        let currentEditRoleId = null;
+        let currentEditRoleOldName = null;
+        function openRoleEditModal(role) {
+            currentEditRoleId = role.id;
+            currentEditRoleOldName = role.name;
+            // Extract emoji and name
+            const match = /^(\p{Emoji_Presentation}|\p{Extended_Pictographic})?\s*(.*)$/u.exec(role.name);
+            currentEmoji = match && match[1] ? match[1] : "😀";
+            selectedEmoji.textContent = currentEmoji;
+            document.getElementById('editRoleName').value = match && match[2] ? match[2] : role.name;
+            document.getElementById('editPanelAdmin').checked = !!role.panelAdmin;
+            document.getElementById('editPanelUser').checked = !!role.panelUser;
+            document.getElementById('editPanelLogs').checked = !!role.panelLogs;
+            document.getElementById('editCanDelete').checked = !!role.canDelete;
+            document.getElementById('editCanCreate').checked = !!role.canCreate;
+            document.getElementById('editCanEdit').checked = !!role.canEdit;
+            document.getElementById('editCanViewLogs').checked = !!role.canViewLogs;
+            document.getElementById('roleEditModal').style.display = 'flex';
+            // Attach delete logic
+            document.getElementById('deleteRoleBtn').onclick = async function() {
+                if (!confirm("Delete this role?")) return;
+                await fetch(`http://localhost:5089/api/roles/${currentEditRoleId}`, { method: "DELETE" });
+                await logAction({
+                    admin: sessionStorage.getItem('loggedInAdmin'),
+                    targetUser: role.name,
+                    action: "Deleted role",
+                    details: ""
+                });
+                document.getElementById('roleEditModal').style.display = 'none';
+                updateRoleList();
+                updateRoleDropdown();
+                updateUserList();
+            };
+        }
+        document.getElementById('closeRoleEditModal').onclick = function() {
+            document.getElementById('roleEditModal').style.display = 'none';
+        };
+        document.getElementById('editRoleForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const id = currentEditRoleId;
+            const name = currentEmoji + " " + document.getElementById('editRoleName').value.trim();
+            const panelAdmin = document.getElementById('editPanelAdmin').checked;
+            const panelUser = document.getElementById('editPanelUser').checked;
+            const panelLogs = document.getElementById('editPanelLogs').checked;
+            const canDelete = document.getElementById('editCanDelete').checked;
+            const canCreate = document.getElementById('editCanCreate').checked;
+            const canEdit = document.getElementById('editCanEdit').checked;
+            const canViewLogs = document.getElementById('editCanViewLogs').checked;
+            await fetch(`http://localhost:5089/api/roles/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name,
+                    panelAdmin,
+                    panelUser,
+                    panelLogs,
+                    canDelete,
+                    canCreate,
+                    canEdit,
+                    canViewLogs,
+                    oldName: currentEditRoleOldName
+                })
+            });
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: name,
+                action: "Edited role",
+                details: `Permissions updated`
+            });
+            document.getElementById('roleEditModal').style.display = 'none';
+            updateRoleList();
+        };
+        document.getElementById('deleteRoleBtn').onclick = async function() {
+            const id = currentEditRoleId;
+            if (!confirm("Delete this role?")) return;
+            await fetch(`http://localhost:5089/api/roles/${id}`, { method: "DELETE" });
+            const role = (await fetch("http://localhost:5089/api/roles").then(r => r.json())).find(r => r.id == id);
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: role.name,
+                action: "Deleted role",
+                details: ""
+            });
+            document.getElementById('roleEditModal').style.display = 'none';
+            updateRoleList();
+        };
+
+        // --- Add User ---
+        document.getElementById('addUserForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+            if (username.length < 3 || password.length < 6) {
+                alert('Username must be at least 3 characters and password at least 6 characters.');
+                return;
+            }
+            const res = await fetch("http://localhost:5089/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password, role })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                alert(err.error || "Failed to add user.");
+                return;
+            }
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: username,
+                action: "Created user",
+                details: `Role: ${role}`
+            });
+            updateUserList();
+            this.reset();
+        });
+
+        // --- Add Role ---
+        document.getElementById('addRoleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('newRoleName').value.trim();
+            if (!name) return;
+            const role = {
+                name,
+                panelAdmin: false,
+                panelUser: true,
+                panelLogs: false,
+                canDelete: false,
+                canCreate: false,
+                canEdit: false,
+                canViewLogs: false
+            };
+            await fetch("http://localhost:5089/api/roles", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(role)
+            });
+            await logAction({
+                admin: sessionStorage.getItem('loggedInAdmin'),
+                targetUser: name,
+                action: "Created role",
+                details: ""
+            });
+            location.reload(); // <-- Add this line to refresh the page
+        });
+
+        // --- Render roles in add user dropdown with emoji ---
+        async function updateRoleDropdown() {
+            const roles = await fetch("http://localhost:5089/api/roles").then(r => r.json());
+            const select = document.getElementById('newRole');
+            select.innerHTML = '';
+            roles.forEach(role => {
+                const match = /^(\p{Emoji_Presentation}|\p{Extended_Pictographic})?\s*(.*)$/u.exec(role.name);
+                const emoji = match && match[1] ? match[1] : "😀";
+                const name = match && match[2] ? match[2] : role.name;
+                const opt = document.createElement('option');
+                opt.value = role.name;
+                opt.textContent = `${emoji} ${name}`;
+                select.appendChild(opt);
+            });
+        }
+
+        // --- Initial render ---
+        updateUserList();
+        updateRoleList();
+        updateRoleDropdown();
+        document.getElementById('userSearch').addEventListener('input', updateUserList);
+    </script>
+</body>
+</html>
