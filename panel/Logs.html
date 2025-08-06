@@ -4,31 +4,94 @@
     <meta charset="UTF-8">
     <title>Logs</title>
     <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; background: #f4f6fb; color: #222; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
-        .side-nav { position: fixed; top: 0; left: 0; width: 80px; height: 100vh; background: #181c24; display: flex; flex-direction: column; align-items: center; padding: 18px 0 0 0; z-index: 1000; box-shadow: 2px 0 8px rgba(0,0,0,0.08); transition: width 0.2s; }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f4f6fb;
+            color: #222;
+            font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif;
+        }
+        .side-nav {
+            position: fixed; top: 0; left: 0; width: 80px; height: 100vh;
+            background: #181c24; display: flex; flex-direction: column; align-items: center;
+            padding: 18px 0 0 0; z-index: 1000; box-shadow: 2px 0 8px rgba(0,0,0,0.08); transition: width 0.2s;
+        }
         .side-nav.expanded { width: 260px; }
-        .side-nav .logo { width: 48px; height: 48px; background: #4f46e5; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.3em; margin-bottom: 24px; margin-top: 6px; }
-        .side-nav .company-label { color: #fff; font-size: 1.08em; font-weight: 600; margin-bottom: 24px; letter-spacing: 1px; display: none; }
+        .side-nav .logo {
+            width: 48px; height: 48px; background: #4f46e5; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 700; font-size: 1.3em; margin-bottom: 24px; margin-top: 6px;
+        }
+        .side-nav .company-label {
+            color: #fff; font-size: 1.08em; font-weight: 600; margin-bottom: 24px;
+            letter-spacing: 1px; display: none;
+        }
         .side-nav.expanded .company-label { display: block; }
-        .side-nav .nav-btn { background: none; border: none; color: #bfc9d9; font-size: 1.5em; margin: 12px 0; width: 100%; display: flex; align-items: center; gap: 18px; padding: 10px 24px; cursor: pointer; border-radius: 8px; transition: background 0.18s, color 0.18s; }
+        .side-nav .nav-btn {
+            background: none; border: none; color: #bfc9d9; font-size: 1.5em;
+            margin: 12px 0; width: 100%; display: flex; align-items: center; gap: 18px;
+            padding: 10px 24px; cursor: pointer; border-radius: 8px; transition: background 0.18s, color 0.18s;
+        }
         .side-nav .nav-btn.active, .side-nav .nav-btn:hover { background: #232836; color: #fff; }
         .side-nav .nav-btn span { display: none; font-size: 1.08em; font-weight: 500; }
         .side-nav.expanded .nav-btn span { display: inline; }
         .side-nav .bottom-section { margin-top: auto; width: 100%; padding-bottom: 18px; }
-        .side-nav .toggle-expand { background: none; border: none; color: #bfc9d9; font-size: 1.3em; margin: 10px 0 0 0; cursor: pointer; width: 100%; text-align: center; transition: color 0.18s; }
+        .side-nav .toggle-expand {
+            background: none; border: none; color: #bfc9d9; font-size: 1.3em;
+            margin: 10px 0 0 0; cursor: pointer; width: 100%; text-align: center; transition: color 0.18s;
+        }
         .side-nav .toggle-expand:hover { color: #fff; }
-        .main-content { margin-left: 80px; padding: 32px 12px 12px 12px; transition: margin-left 0.2s; }
+        .main-content {
+            margin-left: 80px; padding: 32px 12px 12px 12px; transition: margin-left 0.2s;
+        }
         .side-nav.expanded ~ .main-content { margin-left: 260px; }
-        .logs-table { width: 100%; border-collapse: collapse; margin-top: 24px; background: #fff; border-radius: 8px; overflow: hidden; }
-        .logs-table th, .logs-table td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
-        .logs-table th { background: #f4f6fb; font-weight: 600; }
+        .center-content, h1, h2, h3, label {
+            font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif;
+            text-align: center !important;
+        }
+        .logs-bg {
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto 0 auto;
+            background: linear-gradient(120deg, #e3e8ee 60%, #f4f6fb 100%);
+            border-radius: 24px;
+            box-shadow: 0 6px 32px rgba(80,100,180,0.10);
+            padding: 36px 32px 32px 32px;
+            display: block;
+        }
+        .logs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(80,100,180,0.06);
+        }
+        .logs-table th, .logs-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+            font-family: 'Inter', 'Poppins', 'Segoe UI', Arial, sans-serif;
+        }
+        .logs-table th {
+            background: #f4f6fb;
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 1.08em;
+        }
         .logs-table tr:last-child td { border-bottom: none; }
+        @media (max-width: 900px) {
+            .logs-bg { width: 98vw; padding: 18px 4vw; }
+            .logs-table { font-size: 0.93em; }
+        }
         @media (max-width: 700px) {
             .side-nav, .side-nav.expanded { width: 60px; }
             .side-nav.expanded .company-label, .side-nav.expanded .nav-btn span { display: none; }
             .main-content, .side-nav.expanded ~ .main-content { margin-left: 60px; }
-            .logs-table { font-size: 0.9em; }
+            .logs-bg { width: 99vw; padding: 10px 1vw; }
         }
     </style>
 </head>
@@ -65,11 +128,12 @@
     </div>
     <div class="main-content">
         <h1 class="center-content">Logs</h1>
-        <div class="center-content">
+        <div class="logs-bg">
             <table class="logs-table" id="logsTable">
                 <thead>
                     <tr>
                         <th>Date</th>
+                        <th>Time</th>
                         <th>Admin</th>
                         <th>Target User</th>
                         <th>Action</th>
@@ -144,7 +208,7 @@
             document.getElementById('userPanelBtn').style.display = permissions.panelUser ? '' : 'none';
             document.getElementById('logsBtn').style.display = permissions.panelLogs ? '' : 'none';
             document.getElementById('sidebarUserInfo').innerHTML =
-                `<div>Logged in as:</div><div style="font-weight:700;">${user.username}</div><div style="font-size:0.95em;">Role: ${user.role}</div>`;
+                `<div></div><div style="font-weight:700;">👤${user.username}</div><div style="font-size:0.95em;">${user.role}</div>`;
 
             // Fetch and render logs
             if (permissions.canViewLogs || permissions.panelLogs) {
@@ -153,12 +217,16 @@
                     const tbody = document.querySelector('#logsTable tbody');
                     tbody.innerHTML = '';
                     if (logs.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No logs found.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No logs found.</td></tr>';
                     } else {
                         logs.forEach(log => {
+                            let dateObj = log.date ? new Date(log.date) : null;
+                            let dateStr = dateObj ? dateObj.toLocaleDateString() : '';
+                            let timeStr = dateObj ? dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}) : '';
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td>${log.date ? new Date(log.date).toLocaleString() : ''}</td>
+                                <td>${dateStr}</td>
+                                <td>${timeStr}</td>
                                 <td>${log.admin || ''}</td>
                                 <td>${log.targetUser || ''}</td>
                                 <td>${log.action || ''}</td>
@@ -168,7 +236,7 @@
                         });
                     }
                 } catch (e) {
-                    document.querySelector('#logsTable tbody').innerHTML = '<tr><td colspan="5" style="color:red;text-align:center;">Failed to load logs.</td></tr>';
+                    document.querySelector('#logsTable tbody').innerHTML = '<tr><td colspan="6" style="color:red;text-align:center;">Failed to load logs.</td></tr>';
                 }
             }
         })();

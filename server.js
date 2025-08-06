@@ -45,11 +45,11 @@ const insertHardcodedUser = async (username, password, role) => {
         }
     });
 };
-insertHardcodedUser('hayden', 'Cheetah41', 'Admin');
+//insertHardcodedUser('hayden', 'Cheetah41', 'Admin');
 //insertHardcodedUser('admin', 'admin123', 'Admin');
 
 // Insert a default admin role if none exist
-db.get('SELECT * FROM roles WHERE name = ?', ['Admin'], (err, row) => {
+/*db.get('SELECT * FROM roles WHERE name = ?', ['Admin'], (err, row) => {
     if (!row) {
         db.run(
             'INSERT INTO roles (name, panelAdmin, panelUser, panelLogs, canDelete, canCreate, canEdit, canViewLogs) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
@@ -59,7 +59,7 @@ db.get('SELECT * FROM roles WHERE name = ?', ['Admin'], (err, row) => {
             }
         );
     }
-});
+});*/
 
 // --- API ENDPOINTS ---
 
